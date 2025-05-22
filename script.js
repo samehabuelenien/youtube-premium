@@ -51,6 +51,33 @@ function animateOnScroll() {
 animateElements.forEach((element) => {
   element.style.opacity = "0";
 });
+document.addEventListener("DOMContentLoaded", function () {
+  let totalTime = 90 * 60; // 90 دقيقة = 5400 ثانية
+
+  const hoursEl = document.getElementById("hours");
+  const minutesEl = document.getElementById("minutes");
+  const secondsEl = document.getElementById("seconds");
+  const expiredText = document.getElementById("expired-text");
+
+  const countdownInterval = setInterval(function () {
+    const hours = Math.floor(totalTime / 3600);
+    const minutes = Math.floor((totalTime % 3600) / 60);
+    const seconds = totalTime % 60;
+
+    hoursEl.textContent = String(hours).padStart(2, "0");
+    minutesEl.textContent = String(minutes).padStart(2, "0");
+    secondsEl.textContent = String(seconds).padStart(2, "0");
+
+    totalTime--;
+
+    if (totalTime < 0) {
+      clearInterval(countdownInterval);
+      document.getElementById("countdown").style.display = "none";
+      expiredText.style.display = "block";
+    }
+  }, 1000);
+});
+
 
 // Countdown timer (dynamic based on data attribute)
 function updateCountdown() {
