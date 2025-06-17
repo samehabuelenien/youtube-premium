@@ -1,58 +1,73 @@
 // Set current year in footer
-document.getElementById("current-year").textContent = new Date().getFullYear();
+document.getElementById("current-year").textContent = new Date().getFullYear()
 
 // Smooth scroll for anchor links
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", function (e) {
-    e.preventDefault();
+    e.preventDefault()
 
-    const targetId = this.getAttribute("href");
-    const targetElement = document.querySelector(targetId);
+    const targetId = this.getAttribute("href")
+    const targetElement = document.querySelector(targetId)
 
     if (targetElement) {
       window.scrollTo({
         top: targetElement.offsetTop,
         behavior: "smooth",
-      });
+      })
     }
-  });
-});
+  })
+})
 
-// Add animation to elements on scroll
-const animateElements = document.querySelectorAll(
-  ".pricing-card, .feature-card, .why-us-point, .testimonial-card"
-);
+// تحسين نظام التحريك عند التمرير (Animate on Scroll)
+const animateOnScrollObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      // إذا كان العنصر مرئياً
+      if (entry.isIntersecting) {
+        // إضافة الصنف الخاص بالتحريك
+        entry.target.classList.add("aos-animate")
+        // إيقاف مراقبة العنصر بعد تحريكه (اختياري)
+        // animateOnScrollObserver.unobserve(entry.target);
+      } else {
+        // إزالة الصنف إذا خرج العنصر من الشاشة (للتأثيرات المتكررة)
+        if (entry.target.dataset.aosOnce !== "true") {
+          entry.target.classList.remove("aos-animate")
+        }
+      }
+    })
+  },
+  {
+    // تحديد متى يتم تفعيل التأثير (عندما يكون 10% من العنصر مرئياً)
+    threshold: 0.1,
+    // إضافة هامش لتفعيل التأثير قبل وصول العنصر للشاشة
+    rootMargin: "0px 0px -50px 0px",
+  },
+)
 
-// Simple function to check if element is in viewport
-function isInViewport(element) {
-  const rect = element.getBoundingClientRect();
-  return (
-    rect.top >= 0 &&
-    rect.left >= 0 &&
-    rect.bottom <=
-      (window.innerHeight || document.documentElement.clientHeight) &&
-    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-  );
-}
+// تطبيق التأثيرات على العناصر
+document.addEventListener("DOMContentLoaded", () => {
+  // تحديد جميع العناصر التي تحتوي على سمة data-aos
+  const animatedElements = document.querySelectorAll("[data-aos]")
 
-// Add animation class when elements come into view
-function animateOnScroll() {
-  animateElements.forEach((element) => {
-    if (
-      isInViewport(element) &&
-      !element.classList.contains("animate-fadeIn")
-    ) {
-      element.classList.add("animate-fadeIn");
+  animatedElements.forEach((element) => {
+    // إضافة الصنف الأساسي للتحريك
+    element.classList.add("aos-init")
+
+    // تعيين تأخير مخصص (إذا كان موجوداً)
+    if (element.dataset.aosDelay) {
+      element.style.transitionDelay = `${element.dataset.aosDelay}ms`
     }
-  });
-}
 
-// Set initial styles for animation
-animateElements.forEach((element) => {
-  element.style.opacity = "0";
-});
+    // تعيين مدة مخصصة (إذا كانت موجودة)
+    if (element.dataset.aosDuration) {
+      element.style.transitionDuration = `${element.dataset.aosDuration}ms`
+    }
 
-// Countdown timer (dynamic based on data attribute)
+    // بدء مراقبة العنصر
+    animateOnScrollObserver.observe(element)
+  })
+})
+
 function updateCountdown() {
   const countdownContainer = document.querySelector(".cta-timer");
   if (!countdownContainer) return;
@@ -60,15 +75,20 @@ function updateCountdown() {
   const targetDateStr = countdownContainer.getAttribute("data-countdown-date");
   if (!targetDateStr) return;
 
-  const countDownDate = new Date(targetDateStr).getTime();
-  const now = new Date().getTime();
-  const distance = countDownDate - now;
+  let countDownDate = new Date(targetDateStr).getTime();
+  const now = Date.now();
+  let distance = countDownDate - now;
 
+  // عدد الميلي ثانية في 4 أيام
+  const fourDaysMs = 4 * 24 * 60 * 60 * 1000;
+
+  // ✅ لما التايمر يخلص، نرجع نعد من جديد لمدة 4 أيام
   if (distance < 0) {
-    document.getElementById("days").innerHTML = "00";
-    document.getElementById("hours").innerHTML = "00";
-    document.getElementById("minutes").innerHTML = "00";
-    document.getElementById("seconds").innerHTML = "00";
+    const newDate = new Date(now + fourDaysMs);
+    countdownContainer.setAttribute(
+      "data-countdown-date",
+      newDate.toISOString()
+    );
     return;
   }
 
@@ -95,38 +115,36 @@ function updateCountdown() {
   }
 }
 
-// Run animations and countdown
-window.addEventListener("load", function () {
-  animateOnScroll();
+window.addEventListener("load", () => {
   updateCountdown();
   setInterval(updateCountdown, 1000);
 });
-window.addEventListener("scroll", animateOnScroll);
+
 
 // Add hover effect to pricing cards
-const pricingCards = document.querySelectorAll(".pricing-card");
+const pricingCards = document.querySelectorAll(".pricing-card")
 pricingCards.forEach((card) => {
   card.addEventListener("mouseenter", function () {
     if (!this.classList.contains("featured")) {
       pricingCards.forEach((otherCard) => {
         if (!otherCard.classList.contains("featured")) {
-          otherCard.style.transform = "scale(0.98)";
-          otherCard.style.opacity = "0.8";
+          otherCard.style.transform = "scale(0.98)"
+          otherCard.style.opacity = "0.8"
         }
-      });
-      this.style.transform = "translateY(-10px)";
-      this.style.opacity = "1";
+      })
+      this.style.transform = "translateY(-10px)"
+      this.style.opacity = "1"
     }
-  });
+  })
 
   card.addEventListener("mouseleave", function () {
     if (!this.classList.contains("featured")) {
       pricingCards.forEach((otherCard) => {
         if (!otherCard.classList.contains("featured")) {
-          otherCard.style.transform = "scale(1)";
-          otherCard.style.opacity = "1";
+          otherCard.style.transform = "scale(1)"
+          otherCard.style.opacity = "1"
         }
-      });
+      })
     }
-  });
-});
+  })
+})
