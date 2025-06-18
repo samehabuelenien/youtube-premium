@@ -124,8 +124,8 @@
               </ul>
 
               <a
-                href="https://raqmipremium.com/collections/watch/products/youtube-premium"
-                class="pricing-button"
+                href="https://raqmipremium.com/collections/watch/products/youtube-premium"More actions
+                class="pricing-button to-shopify"
                 >اشترك الآن</a
               >
             </div>
@@ -164,8 +164,8 @@
               </ul>
 
               <a
-                href="https://raqmipremium.com/collections/watch/products/اشتراك-التطبيق-الأحمر-بريميوم-youtube-premium-اشتراك-6-اشهر-copy"
-                class="pricing-button featured"
+                href="https://raqmipremium.com/collections/watch/products/اشتراك-التطبيق-الأحمر-بريميوم-youtube-premium-اشتراك-6-اشهر-copy"More actions
+                class="pricing-button featured to-shopify"
                 >اشترك الآن</a
               >
             </div>
@@ -203,8 +203,8 @@
               </ul>
 
               <a
-                href="https://raqmipremium.com/collections/watch/products/اشتراك-التطبيق-الأحمر-بريميوم-youtube-premium-اشتراك-سنه-كاملة"
-                class="pricing-button"
+                href="https://raqmipremium.com/collections/watch/products/اشتراك-التطبيق-الأحمر-بريميوم-youtube-premium-اشتراك-سنه-كاملة"More actions
+                class="pricing-button to-shopify"
                 >اشترك الآن</a
               >
             </div>
@@ -250,8 +250,8 @@
               </ul>
 
               <a
-                href="https://raqmipremium.com/collections/watch/products/untitled-may23_01-33"
-                class="pricing-button featured"
+                href="https://raqmipremium.com/collections/watch/products/untitled-may23_01-33"More actions
+                class="pricing-button featured to-shopify"
                 >اشترك الآن</a
               >
             </div>
@@ -494,5 +494,14 @@
     </main>
 
     <script src="script.js"></script>
+   const gclid = new URLSearchParams(window.location.search).get('gclid');More actions
+  if (gclid) {
+    document.querySelectorAll('a.to-shopify').forEach(link => {
+      const url = new URL(link.href);
+      url.searchParams.set('gclid', gclid);
+      link.href = url.toString();
+    });
+  }
+</script>
   </body>
 </html>
