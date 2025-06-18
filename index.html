@@ -494,7 +494,8 @@
     </main>
 
     <script src="script.js"></script>
-   const gclid = new URLSearchParams(window.location.search).get('gclid');More actions
+    <script>More actions
+  const gclid = new URLSearchParams(window.location.search).get('gclid');
   if (gclid) {
     document.querySelectorAll('a.to-shopify').forEach(link => {
       const url = new URL(link.href);
